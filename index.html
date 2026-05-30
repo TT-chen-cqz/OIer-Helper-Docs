@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>OIer-Helper 在线体验</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(145deg, #e0e5ec 0%, #f0f4fa 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .chat-card {
+            width: 100%;
+            max-width: 580px;
+            height: 85vh;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(2px);
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.6);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .chat-header {
+            background: #1e2a3e;
+            color: white;
+            padding: 20px 24px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chat-header span {
+            background: #3b82f6;
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+            box-shadow: 0 0 6px #3b82f6;
+        }
+
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            max-width: 85%;
+            animation: fadeSlide 0.2s ease-out;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-message {
+            justify-content: flex-end;
+            align-self: flex-end;
+        }
+
+        .ai-message {
+            justify-content: flex-start;
+            align-self: flex-start;
+        }
+
+        .bubble {
+            padding: 12px 18px;
+            border-radius: 26px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-break: break-word;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .user-bubble {
+            background: #3b82f6;
+            color: white;
+            border-bottom-right-radius: 6px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        }
+
+        .ai-bubble {
+            background: #eef2ff;
+            color: #0f172a;
+            border-bottom-left-radius: 6px;
+            border: 1px solid rgba(59,130,246,0.2);
+        }
+
+        .more-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 5px 14px;
+            margin-top: 8px;
+            margin-left: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #1e293b;
+            width: fit-content;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .more-btn:hover {
+            background: #eef2ff;
+            border-color: #3b82f6;
+            color: #1e40af;
+            transform: scale(0.96);
+        }
+
+        .more-btn:active {
+            transform: scale(0.94);
+        }
+
+        .input-wrapper {
+            background: #ffffffcc;
+            backdrop-filter: blur(12px);
+            padding: 16px 20px 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 1px solid #cbd5e1;
+            border-radius: 40px;
+            font-size: 1rem;
+            outline: none;
+            background: white;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        .input-wrapper button {
+            background: #0f172a;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(95deg, #1e293b, #0f172a);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .input-wrapper button:active {
+            transform: scale(0.96);
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div class="chat-card">
+    <div class="chat-header">
+        <span></span> OIer-Helper 在线体验
+    </div>
+    <div class="messages-area" id="messagesContainer"></div>
+    <div class="input-wrapper">
+        <input type="text" id="userInput" placeholder="输入消息..." autocomplete="off" value="分析洛谷 P3371 题目解法">
+        <button id="sendBtn">发送</button>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const messagesContainer = document.getElementById('messagesContainer');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        let isAlertShowing = false;
+
+        function showDownloadPrompt() {
+            if (isAlertShowing) return Promise.resolve(false);
+            isAlertShowing = true;
+            return Swal.fire({
+                title: '提示',
+                text: '请下载 Skill 后继续',
+                icon: 'info',
+                confirmButtonText: '下载',
+                confirmButtonColor: '#2563eb',
+                showCancelButton: true,
+                cancelButtonText: '取消'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'https://skillhub.cn/skills/oier-helper';
+                }
+                isAlertShowing = false;
+                return result.isConfirmed;
+            }).catch(() => {
+                isAlertShowing = false;
+            });
+        }
+
+        function appendMessage(sender, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender === 'user' ? 'user-message' : 'ai-message'}`;
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = `bubble ${sender === 'user' ? 'user-bubble' : 'ai-bubble'}`;
+            if (sender === 'ai') {
+                bubbleDiv.innerHTML = text;
+            } else {
+                bubbleDiv.textContent = text;
+            }
+            messageDiv.appendChild(bubbleDiv);
+            
+            if (sender === 'ai') {
+                const moreButton = document.createElement('button');
+                moreButton.textContent = '查看更多';
+                moreButton.className = 'more-btn';
+                moreButton.setAttribute('type', 'button');
+                moreButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showDownloadPrompt();
+                });
+                messageDiv.appendChild(moreButton);
+            }
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function clearInput() {
+            userInput.value = '';
+            userInput.focus();
+        }
+
+        function handleSendMessage() {
+            if (isAlertShowing) return;
+
+            let rawMessage = userInput.value;
+            if (!rawMessage || rawMessage.trim() === '') {
+                return;
+            }
+
+            const trimmedMsg = rawMessage.trim();
+
+            if (trimmedMsg === '分析洛谷 P3371 题目解法') {
+                appendMessage('user', trimmedMsg);
+                appendMessage('ai', '<h3>解法思路</h3><br>这道题是最短路问题的模板题（弱化版）。给定一个有向图，边权非负，求从源点 s 到所有点的最短距离。<br><br>由于 边权 w ≥ 0，Dijkstra 算法天然适用。本题数据范围 n ≤ 10⁴, m ≤ 5×10⁵，朴素 Dijkstra（O(n²)）约 10⁸ 会比较悬，堆优化版 Dijkstra（O((n+m)logn)）可以轻松通过。<br><br>题目特别说明数据随机，所以 SPFA 也能过，但正式比赛中不推荐依赖 SPFA，因为构造数据可以卡掉它（对应加强版 P4779）...');
+                clearInput();
+                return;
+            }
+
+            appendMessage('user', trimmedMsg);
+            clearInput();
+            
+            showDownloadPrompt();
+        }
+
+        function initWelcome() {
+            messagesContainer.innerHTML = '';
+            appendMessage('ai', '欢迎使用 OIer-Helper，OIer-Helper 是一个面向 OI / ICPC / 算法竞赛学习者的智能助手。当用户请求分析算法题目（提供链接或题面）、讲解算法或数据结构、查找和解读题解、调试用户代码、按算法或难度搜索推荐练习题、或理解证明与复杂度时，应使用本 Skill。支持洛谷、AtCoder、Codeforces、LibreOJ、AcWing、HDU、POJ 等主流 OJ...');
+        }
+
+        sendBtn.addEventListener('click', handleSendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSendMessage();
+            }
+        });
+        
+        initWelcome();
+    })();
+</script>
+</body>
+</html>
