@@ -6,13 +6,13 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: '安装', link: '/install/' },
+      { text: '下载', link: '/install/' },
       { text: '快速上手', link: '/use/' }
     ],
 
     sidebar: [
       {
-        text: '安装',
+        text: '下载',
         link: '/install/'
       },
       {
