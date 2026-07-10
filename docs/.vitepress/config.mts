@@ -17,7 +17,17 @@ export default defineConfig({
       },
       {
         text: '快速上手',
-        link: '/use/'
+        link: '/use/',
+        items: [
+          { "text": "项目介绍", "link": "/use/1" },
+          { "text": "安装方法", "link": "/use/2" },
+          { "text": "快速开始", "link": "/use/3" },
+          { "text": "核心功能详解", "link": "/use/4" },
+          { "text": "支持的 OJ 平台", "link": "/use/5" },
+          { "text": "使用指南", "link": "/use/6" },
+          { "text": "常见问题", "link": "/use/7" },
+          { "text": "许可证", "link": "/use/8" }
+        ]
       }
     ],
 
