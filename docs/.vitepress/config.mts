@@ -6,13 +6,13 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: '下载', link: '/install/' },
+      { text: '安装', link: '/install/' },
       { text: '快速上手', link: '/use/' }
     ],
 
     sidebar: [
       {
-        text: '下载',
+        text: '安装',
         link: '/install/'
       },
       {
@@ -20,7 +20,7 @@ export default defineConfig({
         link: '/use/',
         items: [
           { "text": "项目介绍", "link": "/use/1" },
-          { "text": "安装方法", "link": "/use/2" },
+          { "text": "ZIP 包导入方法", "link": "/use/2" },
           { "text": "快速开始", "link": "/use/3" },
           { "text": "核心功能详解", "link": "/use/4" },
           { "text": "支持的 OJ 平台", "link": "/use/5" },

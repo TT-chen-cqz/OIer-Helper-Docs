@@ -7,7 +7,7 @@ hero:
   tagline: 面向 OI / ICPC / 算法竞赛学习者的智能助手 Skill。
   actions:
     - theme: brand
-      text: 下载
+      text: 安装
       link: /install/
     - theme: alt
       text: 快速上手
